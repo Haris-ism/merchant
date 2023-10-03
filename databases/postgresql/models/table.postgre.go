@@ -4,10 +4,10 @@ import "gorm.io/gorm"
 
 type Items struct{
 	gorm.Model
-	Name			string		`gorm:"column:name"`
-	Type			string		`gorm:"column:type"`
-	Price			int			`gorm:"column:price"`
-	Quantity		int			`gorm:"column:quantity"`
+	Name			string		`json:"name" gorm:"column:name"`
+	Type			string		`json:"type" gorm:"column:type"`
+	Price			int			`json:"price" gorm:"column:price"`
+	Quantity		int			`json:"quantity" gorm:"column:quantity"`
 }
 
 func (t *Items)TableName()string{
@@ -16,8 +16,9 @@ func (t *Items)TableName()string{
 
 type Discounts struct{
 	gorm.Model
-	Name			string		`gorm:"column:name"`
-	Type			string		`gorm:"column:type"`
+	Name			string		`json:"name" gorm:"column:name"`
+	Type			string		`json:"type" gorm:"column:type"`
+	Percentage		int			`json:"percentage" gorm:"column:percentage"`
 }
 
 func (t *Discounts)TableName()string{

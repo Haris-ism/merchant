@@ -15,6 +15,10 @@ type (
 		WriteRedis(ctx *gin.Context)
 		ReadRedis(ctx *gin.Context)
 		InsertPostgre(ctx *gin.Context)
+		InquiryItems(ctx *gin.Context)
+		InquiryDiscounts(ctx *gin.Context)
+		AddInquiryItems(ctx *gin.Context)
+		AddInquiryDiscounts(ctx *gin.Context)
 	}
 )
 

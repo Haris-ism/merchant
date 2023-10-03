@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	con "merchant/controllers/models"
+	dbs "merchant/databases/postgresql/models"
 	"merchant/models"
 
 	postgre "merchant/databases/postgresql"
@@ -16,6 +18,10 @@ type (
 		WriteRedis(models.RedisReq) error
 		ReadRedis(req models.RedisReq) (string, error)
 		InsertDB(req models.ItemList) error
+		InquiryItems()(dbs.Items,error)
+		InquiryDiscounts()(dbs.Discounts,error)
+		AddInquiryItems(req con.ReqInquiry)error
+		AddInquiryDiscounts(req con.ReqInquiry)error
 	}
 )
 
