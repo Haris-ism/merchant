@@ -19,8 +19,8 @@ type (
 		Insert(req models.ItemList) error
 		QueryInquiryItems(name string) (dbs.Items,error)
 		QueryInquiryDiscounts(name string) (dbs.Discounts,error)
-		InquiryItems()(dbs.Items,error)
-		InquiryDiscounts()(dbs.Discounts,error)
+		InquiryItems()([]dbs.Items,error)
+		InquiryDiscounts()([]dbs.Discounts,error)
 		AddInquiryItems(items dbs.Items)error
 		AddInquiryDiscounts(discounts dbs.Discounts)error
 	}

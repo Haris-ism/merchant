@@ -7,14 +7,14 @@ import (
 	dbs "merchant/databases/postgresql/models"
 )
 
-func (uc *usecase)InquiryItems()(dbs.Items,error){
+func (uc *usecase)InquiryItems()([]dbs.Items,error){
 	items,err:=uc.postgre.InquiryItems()
 	if err!=nil{
 		return items,errors.New(constants.ERROR_DB)
 	}
 	return items,nil
 }
-func (uc *usecase)InquiryDiscounts()(dbs.Discounts,error){
+func (uc *usecase)InquiryDiscounts()([]dbs.Discounts,error){
 	discounts,err:=uc.postgre.InquiryDiscounts()
 	if err!=nil{
 		return discounts,errors.New(constants.ERROR_DB)

@@ -18,8 +18,8 @@ type (
 		WriteRedis(models.RedisReq) error
 		ReadRedis(req models.RedisReq) (string, error)
 		InsertDB(req models.ItemList) error
-		InquiryItems()(dbs.Items,error)
-		InquiryDiscounts()(dbs.Discounts,error)
+		InquiryItems()([]dbs.Items,error)
+		InquiryDiscounts()([]dbs.Discounts,error)
 		AddInquiryItems(req con.ReqInquiry)error
 		AddInquiryDiscounts(req con.ReqInquiry)error
 	}

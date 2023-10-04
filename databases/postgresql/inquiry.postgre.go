@@ -6,16 +6,16 @@ import (
 	"merchant/databases/postgresql/models"
 )
 
-func (db *postgreDB)InquiryItems()(models.Items,error){
-	items:=models.Items{}
+func (db *postgreDB)InquiryItems()([]models.Items,error){
+	items:=[]models.Items{}
 	err:=db.postgre.Find(&items).Error
 	if err!=nil{
 		return items,errors.New(constants.ERROR_INQUIRY)
 	}
 	return items,nil
 }
-func (db *postgreDB)InquiryDiscounts()(models.Discounts,error){
-	discounts:=models.Discounts{}
+func (db *postgreDB)InquiryDiscounts()([]models.Discounts,error){
+	discounts:=[]models.Discounts{}
 	err:=db.postgre.Find(&discounts).Error
 	if err!=nil{
 		return discounts,errors.New(constants.ERROR_INQUIRY)
