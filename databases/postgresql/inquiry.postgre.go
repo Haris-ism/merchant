@@ -8,7 +8,7 @@ import (
 
 func (db *postgreDB)InquiryItems()([]models.InquiryItems,error){
 	items:=[]models.InquiryItems{}
-	err:=db.postgre.Where("status = ?",constants.NOT_USED).Find(&items).Error
+	err:=db.postgre.Find(&items).Error
 	if err!=nil{
 		return items,errors.New(constants.ERROR_INQUIRY)
 	}
