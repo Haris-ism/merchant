@@ -19,6 +19,8 @@ type (
 		InquiryDiscounts(ctx *gin.Context)
 		AddInquiryItems(ctx *gin.Context)
 		AddInquiryDiscounts(ctx *gin.Context)
+		TransItem(ctx *gin.Context)
+		GenVoucher(ctx *gin.Context)
 	}
 )
 

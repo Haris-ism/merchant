@@ -18,10 +18,12 @@ type (
 		WriteRedis(models.RedisReq) error
 		ReadRedis(req models.RedisReq) (string, error)
 		InsertDB(req models.ItemList) error
-		InquiryItems()([]dbs.Items,error)
-		InquiryDiscounts()([]dbs.Discounts,error)
+		InquiryItems()([]dbs.InquiryItems,error)
+		InquiryDiscounts()([]dbs.InquiryDiscounts,error)
 		AddInquiryItems(req con.ReqInquiry)error
 		AddInquiryDiscounts(req con.ReqInquiry)error
+		GenVoucher(req con.ReqGenerateVoucher)(string,error)
+		OrderTransItem(req con.ReqTransItem)(con.ResTransItem,error)
 	}
 )
 

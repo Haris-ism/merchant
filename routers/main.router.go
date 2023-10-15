@@ -22,12 +22,21 @@ func MainRouter(con controller.ControllerInterface) {
 	}
 
 	v2:=r.Group("v2")
-	{
-		v2.GET("/inquiry/items",con.InquiryItems)
-		v2.GET("/inquiry/discounts",con.InquiryDiscounts)
-		v2.POST("/inquiry/items",con.AddInquiryItems)
-		v2.POST("/inquiry/discounts",con.AddInquiryDiscounts)
-
+	{	inquiry:=v2.Group("/inquiry")
+		{
+			inquiry.GET("/items",con.InquiryItems)
+			inquiry.GET("/discounts",con.InquiryDiscounts)
+			inquiry.POST("/items",con.AddInquiryItems)
+			inquiry.POST("/discounts",con.AddInquiryDiscounts)
+		}
+		transaction:=v2.Group("/transaction")
+		{
+			transaction.POST("/items",con.TransItem)
+		}
+		generate:=v2.Group("/generate")
+		{
+			generate.POST("/voucher",con.GenVoucher)
+		}
 	}
 
 

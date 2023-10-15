@@ -7,14 +7,14 @@ import (
 	dbs "merchant/databases/postgresql/models"
 )
 
-func (uc *usecase)InquiryItems()([]dbs.Items,error){
+func (uc *usecase)InquiryItems()([]dbs.InquiryItems,error){
 	items,err:=uc.postgre.InquiryItems()
 	if err!=nil{
 		return items,errors.New(constants.ERROR_DB)
 	}
 	return items,nil
 }
-func (uc *usecase)InquiryDiscounts()([]dbs.Discounts,error){
+func (uc *usecase)InquiryDiscounts()([]dbs.InquiryDiscounts,error){
 	discounts,err:=uc.postgre.InquiryDiscounts()
 	if err!=nil{
 		return discounts,errors.New(constants.ERROR_DB)
@@ -34,7 +34,6 @@ func (uc *usecase)AddInquiryItems(req models.ReqInquiry)error{
 	items.Name=req.Name
 	items.Price=req.Price
 	items.Type=req.Type
-	items.Quantity=req.Quantity
 	err=uc.postgre.AddInquiryItems(items)
 	if err!=nil{
 		return errors.New(constants.ERROR_DB)
