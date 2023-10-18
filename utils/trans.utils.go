@@ -2,7 +2,6 @@ package utils
 
 import (
 	"crypto/rand"
-	"fmt"
 )
 
 func GenerateRandom(length int)(string,error){
@@ -10,7 +9,6 @@ func GenerateRandom(length int)(string,error){
 	buffer := make([]byte, length)
     _, err := rand.Read(buffer)
     if err != nil {
-        fmt.Println("ieu err")
 		return "",err
     }
 	for i := 0; i < length; i++ {

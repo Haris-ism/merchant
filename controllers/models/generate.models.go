@@ -8,17 +8,24 @@ type ReqGenerateVoucher struct{
 }
 
 type ReqTransItem struct{
-	ID			int			`json:"item_id"`
-	Discount	string		`json:"discount"`
-	Quantity	int			`json:"quantity"`
-	CC			string		`json:"cc_number"`
-	Amount		int			`json:"amount"`
+	ID			string			`json:"item_id"`
+	Discount	string			`json:"discount"`
+	Quantity	string			`json:"quantity"`
+	CC			string			`json:"cc_number"`
+	Amount		string			`json:"amount"`
 }
 
 type ResTransItem struct{
-	ID			int			`json:"item_id"`
+	ID			string		`json:"item_id"`
 	Name		string		`json:"item_name"`
-	Quantity	int			`json:"quantity"`
+	Quantity	string		`json:"quantity"`
+	CC			string		`json:"cc_number"`
+	Code		string		`json:"code"`
+}
+type DecTransItem struct{
+	ID			string		`json:"item_id"`
+	Name		string		`json:"item_name"`
+	Quantity	string		`json:"quantity"`
 	CC			string		`json:"cc_number"`
 	Code		[]string	`json:"code"`
 }
