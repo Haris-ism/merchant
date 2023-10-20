@@ -3,6 +3,7 @@ package controller
 import (
 	"merchant/constants"
 	"merchant/controllers/models"
+	"merchant/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,6 +20,22 @@ func (c *controller)TransItem(ctx *gin.Context){
 		res.Message=constants.INVALID_INPUT
 		res.Code=http.StatusBadRequest
 		logrus.Error(res.Message)
+		ctx.JSON(http.StatusBadRequest,res)
+		return
+	}
+	reqHeader:=models.ReqHeader{}
+	if err:=ctx.BindHeader(&reqHeader);err!=nil{
+		logrus.Error(err)
+		res.Message=err.Error()
+		res.Code=http.StatusBadRequest
+		ctx.JSON(http.StatusBadRequest,res)
+		return
+	}
+	err:=utils.SignatureValidation(reqHeader,req)
+	if err!=nil{
+		logrus.Error(err)
+		res.Message=err.Error()
+		res.Code=http.StatusBadRequest
 		ctx.JSON(http.StatusBadRequest,res)
 		return
 	}
