@@ -1,7 +1,6 @@
 package redis_db
 
 import (
-	"merchant/models"
 	"merchant/utils"
 
 	"github.com/go-redis/redis/v8"
@@ -13,8 +12,8 @@ type (
 		redis *redis.Client
 	}
 	RedisInterface interface {
-		WriteRedis(models.RedisReq) error
-		ReadRedis(req models.RedisReq) (string, error)
+		WriteRedis(key string, val string, exp int) error
+		ReadRedis(key string) (string, error) 
 	}
 )
 

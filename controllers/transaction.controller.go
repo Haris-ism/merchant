@@ -31,6 +31,7 @@ func (c *controller)TransItem(ctx *gin.Context){
 		ctx.JSON(http.StatusBadRequest,res)
 		return
 	}
+	
 	err:=utils.SignatureValidation(reqHeader,req)
 	if err!=nil{
 		logrus.Error(err)

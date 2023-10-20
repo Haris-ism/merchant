@@ -5,7 +5,7 @@ import (
 )
 
 func (uc *usecase) WriteRedis(req models.RedisReq) error {
-	err := uc.redis.WriteRedis(req)
+	err := uc.redis.WriteRedis(req.Key,req.Data,req.Exp)
 	if err != nil {
 		return err
 	}
@@ -14,7 +14,7 @@ func (uc *usecase) WriteRedis(req models.RedisReq) error {
 }
 
 func (uc *usecase) ReadRedis(req models.RedisReq) (string, error) {
-	res, err := uc.redis.ReadRedis(req)
+	res, err := uc.redis.ReadRedis(req.Key)
 	if err != nil {
 		return res, err
 	}

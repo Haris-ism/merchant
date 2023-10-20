@@ -2,15 +2,14 @@ package redis_db
 
 import (
 	"context"
-	"merchant/models"
 	"time"
 
 	"github.com/sirupsen/logrus"
 )
 
-func (uc *redisDB) WriteRedis(req models.RedisReq) error {
+func (uc *redisDB) WriteRedis(key string, val string, exp int) error {
 	// store data using SET command
-	err := uc.redis.Set(context.Background(), req.Key, req.Data, time.Duration(req.Exp)*time.Second).Err()
+	err := uc.redis.Set(context.Background(), key, val, time.Duration(exp)*time.Second).Err()
 	if err != nil {
 		logrus.Errorf("Error on :%v, unable to SET data. error: %v", "WriteRedis DB Function", err)
 		return err
@@ -20,10 +19,9 @@ func (uc *redisDB) WriteRedis(req models.RedisReq) error {
 	return nil
 }
 
-func (uc *redisDB) ReadRedis(req models.RedisReq) (string, error) {
-
+func (uc *redisDB) ReadRedis(key string) (string, error) {
 	// get data
-	res, err := uc.redis.Get(context.Background(), req.Key).Result()
+	res, err := uc.redis.Get(context.Background(), key).Result()
 	if err != nil {
 		logrus.Errorf("Error on :%v, unable to GET data. error: %v", "ReadRedis DB Function", err)
 		return res, err
