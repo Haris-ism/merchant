@@ -1,10 +1,9 @@
 FROM golang:1.19-alpine3.16 AS builder
-
 WORKDIR /app
-
-COPY ./merchant .
-
-RUN go build
+RUN apk add alpine-sdk
+COPY . .
+# RUN go mod download
+RUN go build -o merchant
 
 FROM alpine:3.16
 
@@ -15,7 +14,7 @@ RUN apk update && apk add --no-cache tzdata
 ENV TZ="Asia/Jakarta"
 
 COPY --from=builder /app/merchant .
-COPY merchant/.env .
+COPY .env .
 
 EXPOSE 8888
 
