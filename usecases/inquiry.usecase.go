@@ -10,7 +10,7 @@ import (
 
 func (uc *usecase)InquiryItems()([]dbs.InquiryItems,error){
 	result,err:=uc.redisInquiryItems()
-	if err!=nil{
+	if err!=nil || len(result)<1 {
 		result,err=uc.postgre.InquiryItems()
 		if err!=nil{
 			return result,errors.New(constants.ERROR_DB)
@@ -42,7 +42,7 @@ func (uc *usecase)redisInquiryItems()([]dbs.InquiryItems,error){
 
 func (uc *usecase)InquiryDiscounts()([]dbs.InquiryDiscounts,error){
 	result,err:=uc.redisInquiryDiscounts()
-	if err!=nil{
+	if err!=nil || len(result)<1{
 		result,err=uc.postgre.InquiryDiscounts()
 		if err!=nil{
 			return result,errors.New(constants.ERROR_DB)
@@ -88,6 +88,10 @@ func (uc *usecase)AddInquiryItems(req models.ReqInquiry)error{
 	if err!=nil{
 		return errors.New(constants.ERROR_DB)
 	}
+	err=uc.redis.WriteRedis(constants.INQUIRY_ITEMS,"",0)
+	if err!=nil{
+		return errors.New(constants.ERROR_DB)
+	}
 	return nil
 }
 func (uc *usecase)AddInquiryDiscounts(req models.ReqInquiry)error{
@@ -103,6 +107,10 @@ func (uc *usecase)AddInquiryDiscounts(req models.ReqInquiry)error{
 	discounts.Type=req.Type
 	discounts.Percentage=req.Percentage
 	err=uc.postgre.AddInquiryDiscounts(discounts)
+	if err!=nil{
+		return errors.New(constants.ERROR_DB)
+	}
+	err=uc.redis.WriteRedis(constants.INQUIRY_DISCOUNTS,"",0)
 	if err!=nil{
 		return errors.New(constants.ERROR_DB)
 	}

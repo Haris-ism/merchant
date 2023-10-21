@@ -14,7 +14,7 @@ func (uc *redisDB) WriteRedis(key string, val string, exp int) error {
 		logrus.Errorf("Error on :%v, unable to SET data. error: %v", "WriteRedis DB Function", err)
 		return err
 	}
-	logrus.Printf("set operation success on WriteRedis DB Function")
+	logrus.Printf("set operation success on WriteRedis DB Function:",val)
 
 	return nil
 }

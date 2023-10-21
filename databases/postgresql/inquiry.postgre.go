@@ -25,7 +25,7 @@ func (db *postgreDB)InquiryDiscounts()([]models.InquiryDiscounts,error){
 
 func (db *postgreDB)QueryInquiryItems(name string) (models.Items,error){
 	items:=models.Items{}
-	err:=db.postgre.Where("name = ?",name).Find(&items).Error
+	err:=db.postgre.Where("item_name = ?",name).Find(&items).Error
 	if err!=nil{
 		return items,err
 	}

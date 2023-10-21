@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type InquiryItems struct{
 	ID				int			`json:"ID"`
-	Name			string		`json:"name" gorm:"column:name"`
+	Name			string		`json:"name" gorm:"column:item_name"`
 	Type			string		`json:"type" gorm:"column:type"`
 	Price			int			`json:"price" gorm:"column:price"`
 }
