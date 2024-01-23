@@ -26,3 +26,20 @@ func (g *ControllerGrpc) InquiryItems(context.Context, *emptypb.Empty) (*merchan
 	res.Data=result
 	return &res,nil
 }
+
+func (g *ControllerGrpc) InquiryDiscounts(context.Context, *emptypb.Empty) (*merchant.InquiryMerchantDiscountsModel, error){
+	fmt.Println("masuk con discount")
+	res:=merchant.InquiryMerchantDiscountsModel{
+		Message: constants.SUCCESS,
+		Code: http.StatusOK,
+	}
+	result,err:=g.uc.InquiryDiscounts()
+	if err!=nil{
+		res.Message=err.Error()
+		res.Code=http.StatusInternalServerError
+		return &res,err
+	}
+	fmt.Println("grps res:",result)
+	res.Data=result
+	return &res,nil
+}

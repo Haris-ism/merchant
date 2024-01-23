@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type InquiryServicesClient interface {
 	InquiryItems(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*InquiryMerchantItemsModel, error)
+	InquiryDiscounts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*InquiryMerchantDiscountsModel, error)
 }
 
 type inquiryServicesClient struct {
@@ -43,11 +44,21 @@ func (c *inquiryServicesClient) InquiryItems(ctx context.Context, in *emptypb.Em
 	return out, nil
 }
 
+func (c *inquiryServicesClient) InquiryDiscounts(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*InquiryMerchantDiscountsModel, error) {
+	out := new(InquiryMerchantDiscountsModel)
+	err := c.cc.Invoke(ctx, "/InquiryServices/InquiryDiscounts", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // InquiryServicesServer is the server API for InquiryServices service.
 // All implementations must embed UnimplementedInquiryServicesServer
 // for forward compatibility
 type InquiryServicesServer interface {
 	InquiryItems(context.Context, *emptypb.Empty) (*InquiryMerchantItemsModel, error)
+	InquiryDiscounts(context.Context, *emptypb.Empty) (*InquiryMerchantDiscountsModel, error)
 	mustEmbedUnimplementedInquiryServicesServer()
 }
 
@@ -57,6 +68,9 @@ type UnimplementedInquiryServicesServer struct {
 
 func (UnimplementedInquiryServicesServer) InquiryItems(context.Context, *emptypb.Empty) (*InquiryMerchantItemsModel, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InquiryItems not implemented")
+}
+func (UnimplementedInquiryServicesServer) InquiryDiscounts(context.Context, *emptypb.Empty) (*InquiryMerchantDiscountsModel, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InquiryDiscounts not implemented")
 }
 func (UnimplementedInquiryServicesServer) mustEmbedUnimplementedInquiryServicesServer() {}
 
@@ -89,6 +103,24 @@ func _InquiryServices_InquiryItems_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _InquiryServices_InquiryDiscounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InquiryServicesServer).InquiryDiscounts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/InquiryServices/InquiryDiscounts",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InquiryServicesServer).InquiryDiscounts(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // InquiryServices_ServiceDesc is the grpc.ServiceDesc for InquiryServices service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -99,6 +131,10 @@ var InquiryServices_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "InquiryItems",
 			Handler:    _InquiryServices_InquiryItems_Handler,
+		},
+		{
+			MethodName: "InquiryDiscounts",
+			Handler:    _InquiryServices_InquiryDiscounts_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

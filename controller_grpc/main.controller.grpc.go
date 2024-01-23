@@ -18,6 +18,7 @@ type (
 	}
 	ControllerGrpcInterface interface {
 		InquiryItems(context.Context, *emptypb.Empty) (*merchant.InquiryMerchantItemsModel, error)
+		InquiryDiscounts(context.Context, *emptypb.Empty) (*merchant.InquiryMerchantDiscountsModel, error)
 	}
 )
 

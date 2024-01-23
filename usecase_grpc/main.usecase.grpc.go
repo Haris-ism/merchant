@@ -17,7 +17,9 @@ type (
 	}
 	UsecaseGrpcInterface interface {
 		InquiryItems()([]*merchant.InquiryItemsModel, error)
+		InquiryDiscounts()([]*merchant.InquiryDiscountsModel, error)
 		redisInquiryItems()([]models.InquiryItems,error)
+		redisInquiryDiscounts()([]models.InquiryDiscounts,error)
 	}
 )
 
