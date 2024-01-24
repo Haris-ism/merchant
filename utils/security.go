@@ -8,7 +8,10 @@ import (
 	"encoding/base64"
 	"encoding/gob"
 	"encoding/hex"
+	"encoding/json"
+	"errors"
 	"fmt"
+	"merchant/constants"
 	"merchant/controllers/models"
 
 	"io"
@@ -37,7 +40,7 @@ func DecryptTransItemRes(req models.ResTransItem)(models.DecTransItem,error){
 	go DecryptFunc(req.Name,chanName)
 	go DecryptFunc(req.Quantity,chanQuantity)
 	go DecryptFunc(req.CC,chanCC)
-	go DecryptArray(req.Code,chanCode)
+	// go DecryptArray(req.Code,chanCode)
 
 	res.ID=<-chanID
 	res.Name=<-chanName
@@ -48,26 +51,22 @@ func DecryptTransItemRes(req models.ResTransItem)(models.DecTransItem,error){
 	return res,nil
 }
 
-func EncryptTransItemRes(req models.ResTransItem,codes []string)(models.ResTransItem,error){
-	chanID:=make(chan string)
-	chanName:=make(chan string)
-	chanQuantity:=make(chan string)
-	chanCC:=make(chan string)
-	chanCode:=make(chan string)
+func EncryptTransItemRes(req models.DecTransItem)(models.DecReqTransItem,error){
+	res:=models.DecReqTransItem{}
+	// fmt.Println("req:",req)
+	bytes,err:=json.Marshal(req)
+	if err!=nil{
+		return res,errors.New(constants.ERROR_DB)
+	}
+	chanReq:=make(chan string)
 
-	go EncryptFunc(req.ID,chanID)
-	go EncryptFunc(req.Name,chanName)
-	go EncryptFunc(req.Quantity,chanQuantity)
-	go EncryptFunc(req.CC,chanCC)
-	go EncryptArray(codes,chanCode)
+	go EncryptFunc(string(bytes),chanReq)
 
-	req.ID=<-chanID
-	req.Name=<-chanName
-	req.Quantity=<-chanQuantity
-	req.CC=<-chanCC
-	req.Code=<-chanCode
+	encrypted:=<-chanReq
+	// fmt.Println("encrypted",encrypted)
+	res.Req=encrypted
 
-	return req,nil
+	return res,nil
 }
 
 func EncryptArray(arr []string,ch chan string){
@@ -138,46 +137,19 @@ func EncryptTransItem(req models.ReqTransItem)(models.ReqTransItem,error){
 
 	return req,nil
 }
-func DecryptTransItem(req models.ReqTransItem)(models.ReqTransItem,error){
-	chanID:=make(chan string)
-	chanDiscount:=make(chan string)
-	chanQuantity:=make(chan string)
-	chanCCNumber:=make(chan string)
-	// chanCVV:=make(chan string)
-	chanAmount:=make(chan string)
-	// chanPrice:=make(chan string)
-	// chanName:=make(chan string)
-	// chanType:=make(chan string)
-	// chanPercentage:=make(chan string)
+func DecryptTransItem(req models.DecReqTransItem)(models.ReqTransItem,error){
+	res:=models.ReqTransItem{}
+	chanReq:=make(chan string)
+	go DecryptFunc(req.Req,chanReq)
 
-	// itemId:=strconv.Itoa(req.ItemID)
-	// qty:=strconv.Itoa(req.Quantity)
-	// amount:=strconv.Itoa(req.Amount)
-	// price:=strconv.Itoa(req.Price)
-	// percent:=strconv.Itoa(req.Percentage)
-	go DecryptFunc(req.ID,chanID)
-	go DecryptFunc(req.Discount,chanDiscount)
-	go DecryptFunc(req.Quantity,chanQuantity)
-	go DecryptFunc(req.CC,chanCCNumber)
-	// go EncryptFunc(req.CVV,chanCVV)
-	go DecryptFunc(req.Amount,chanAmount)
-	// go EncryptFunc(req.Price,chanPrice)
-	// go EncryptFunc(req.Name,chanName)
-	// go EncryptFunc(req.Type,chanType)
-	// go EncryptFunc(req.Percentage,chanPercentage)
+	decrypted:=<-chanReq
+	// fmt.Println("decrypted:",decrypted)
+	err:=json.Unmarshal([]byte(decrypted),&res)
+	if err!=nil{
+		fmt.Println("err decrypted:",err)
+	}
 
-	req.ID=<-chanID
-	req.Discount=<-chanDiscount
-	req.Quantity=<-chanQuantity
-	req.CC=<-chanCCNumber
-	// req.CVV=<-chanCVV
-	req.Amount=<-chanAmount
-	// req.Price=<-chanPrice
-	// req.Name=<-chanName
-	// req.Type=<-chanType
-	// req.Percentage=<-chanPercentage
-
-	return req,nil
+	return res,nil
 }
 
 

@@ -23,7 +23,7 @@ type (
 		AddInquiryItems(req con.ReqInquiry)error
 		AddInquiryDiscounts(req con.ReqInquiry)error
 		GenVoucher(req con.ReqGenerateVoucher)(string,error)
-		OrderTransItem(req con.ReqTransItem)(con.ResTransItem,error)
+		OrderTransItem(req con.DecReqTransItem)(con.DecReqTransItem,error)
 	}
 )
 

@@ -15,7 +15,7 @@ func (c *controller)TransItem(ctx *gin.Context){
 		Message: constants.SUCCESS,
 		Code:http.StatusOK,
 	}
-	req:=models.ReqTransItem{}
+	req:=models.DecReqTransItem{}
 	if err:=ctx.BindJSON(&req);err!=nil{
 		res.Message=constants.INVALID_INPUT
 		res.Code=http.StatusBadRequest
@@ -49,6 +49,6 @@ func (c *controller)TransItem(ctx *gin.Context){
 		return
 	}
 	
-	res.Data=data
+	res.Data=data.Req
 	ctx.JSON(res.Code,res)
 }

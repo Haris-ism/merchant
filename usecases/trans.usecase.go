@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"errors"
+	"fmt"
 	"merchant/controllers/models"
 	dbModels "merchant/databases/postgresql/models"
 	"merchant/utils"
@@ -11,19 +12,18 @@ import (
 )
 
 
-func (uc *usecase)OrderTransItem(req models.ReqTransItem)(models.ResTransItem,error){
-	res:=models.ResTransItem{}
+func (uc *usecase)OrderTransItem(req models.DecReqTransItem)(models.DecReqTransItem,error){
+	res:=models.DecReqTransItem{}
 	codes:=[]string{}
-	req,err:=utils.DecryptTransItem(req)
+	decryptedReq,err:=utils.DecryptTransItem(req)
 	if err!=nil{
 		logrus.Error(err)
 		return res, err
 	}
-	
-	// id,_:=strconv.Atoi(req.ID)
-	amount,_:=strconv.Atoi(req.Amount)
-	qtys,_:=strconv.Atoi(req.Quantity)
-	items,err:=uc.postgre.CheckItems(req)
+	// fmt.Println("decryptedReq",decryptedReq)
+	amount,_:=strconv.Atoi(decryptedReq.Amount)
+	qtys,_:=strconv.Atoi(decryptedReq.Quantity)
+	items,err:=uc.postgre.CheckItems(decryptedReq)
 	if err!=nil{
 		logrus.Error(err)
 		return res,err
@@ -60,24 +60,27 @@ func (uc *usecase)OrderTransItem(req models.ReqTransItem)(models.ResTransItem,er
 	reqDB.Price=items.Price
 	reqDB.TotalPrice=reqTotalPrice
 	reqDB.Quantity=qtys
-	reqDB.CC=req.CC
-	reqDB.Discount=req.Discount
+	reqDB.CC=decryptedReq.CC
+	reqDB.Discount=decryptedReq.Discount
 
 	err=uc.postgre.OrderTransItem(reqDB)
 	if err!=nil{
 		return res,err
 	}
+	resp:=models.DecTransItem{}
 
-	res.ID=strconv.Itoa(int(items.ID))
-	res.Name=items.Name
-	res.CC=req.CC
-	res.Quantity=req.Quantity
-
-	res,err=utils.EncryptTransItemRes(res,codes)
+	resp.ID=strconv.Itoa(int(items.ID))
+	resp.Name=items.Name
+	resp.CC=decryptedReq.CC
+	resp.Quantity=decryptedReq.Quantity
+	resp.Code=codes
+	fmt.Println("res real:",res)
+	encryptedRes,err:=utils.EncryptTransItemRes(resp)
 	if err!=nil{
 		logrus.Error(err)
 		return res, err
 	}
+	fmt.Println("encryptedRes",encryptedRes)
 
-	return res,nil
+	return encryptedRes,nil
 }

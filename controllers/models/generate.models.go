@@ -15,6 +15,10 @@ type ReqTransItem struct{
 	Amount		string			`json:"amount"`
 }
 
+type DecReqTransItem struct{
+	Req			string			`json:"request"`
+}
+
 type ResTransItem struct{
 	ID			string		`json:"item_id"`
 	Name		string		`json:"item_name"`
