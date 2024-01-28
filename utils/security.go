@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"merchant/constants"
 	"merchant/controllers/models"
+	"merchant/protogen/merchant"
 
 	"io"
 )
@@ -47,6 +48,21 @@ func DecryptTransItemRes(req models.ResTransItem)(models.DecTransItem,error){
 	res.Quantity=<-chanQuantity
 	res.CC=<-chanCC
 	res.Code=<-chanCode
+
+	return res,nil
+}
+
+func EncryptTransItemResGrpc(req models.DecTransItem)(string,error){
+	res:=""
+	bytes,err:=json.Marshal(req)
+	if err!=nil{
+		return res,errors.New(constants.ERROR_DB)
+	}
+	chanReq:=make(chan string)
+
+	go EncryptFunc(string(bytes),chanReq)
+
+	res=<-chanReq
 
 	return res,nil
 }
@@ -137,6 +153,21 @@ func EncryptTransItem(req models.ReqTransItem)(models.ReqTransItem,error){
 
 	return req,nil
 }
+func DecryptTransItemGrpc(req *merchant.ReqTransItemsModel)(models.ReqTransItem,error){
+	res:=models.ReqTransItem{}
+	chanReq:=make(chan string)
+	go DecryptFunc(req.Request,chanReq)
+
+	decrypted:=<-chanReq
+	// fmt.Println("decrypted:",decrypted)
+	err:=json.Unmarshal([]byte(decrypted),&res)
+	if err!=nil{
+		fmt.Println("err decrypted:",err)
+	}
+
+	return res,nil
+}
+
 func DecryptTransItem(req models.DecReqTransItem)(models.ReqTransItem,error){
 	res:=models.ReqTransItem{}
 	chanReq:=make(chan string)

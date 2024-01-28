@@ -13,12 +13,13 @@ import (
 type (
 	ControllerGrpc struct {
 		Config *grpc.Server
-		merchant.InquiryServicesServer
+		merchant.MerchantServicesServer
 		uc usecase_grpc.UsecaseGrpcInterface
 	}
 	ControllerGrpcInterface interface {
 		InquiryItems(context.Context, *emptypb.Empty) (*merchant.InquiryMerchantItemsModel, error)
 		InquiryDiscounts(context.Context, *emptypb.Empty) (*merchant.InquiryMerchantDiscountsModel, error)
+		TransItems(ctx context.Context,req *merchant.ReqTransItemsModel) (*merchant.ResMerchantTransModel, error)
 	}
 )
 

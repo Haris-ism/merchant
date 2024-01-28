@@ -20,6 +20,7 @@ type (
 		InquiryDiscounts()([]*merchant.InquiryDiscountsModel, error)
 		redisInquiryItems()([]models.InquiryItems,error)
 		redisInquiryDiscounts()([]models.InquiryDiscounts,error)
+		OrderTransItem(req *merchant.ReqTransItemsModel)(string,error)
 	}
 )
 

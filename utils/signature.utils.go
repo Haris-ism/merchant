@@ -7,9 +7,23 @@ import (
 	"errors"
 	"fmt"
 	"merchant/controllers/models"
+	"merchant/protogen/merchant"
 
 	"github.com/sirupsen/logrus"
+	"google.golang.org/grpc/metadata"
 )
+
+func SignatureValidationGrpc(reqHeader metadata.MD,reqBody *merchant.ReqTransItemsModel)error{
+	body,err:=json.Marshal(reqBody)
+	hash:=Signature(string(body),reqHeader.Get("timestamp")[0])
+	// fmt.Println("hash:",hash)
+	// fmt.Println("sig:",reqHeader.Signature)
+	if hash!=reqHeader.Get("signature")[0]{
+		logrus.Error("err:",err)
+		return errors.New("Invalid Signature")
+	}
+	return nil
+}
 
 func SignatureValidation(reqHeader models.ReqHeader,reqBody models.DecReqTransItem)error{
 
